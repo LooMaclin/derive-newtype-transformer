@@ -1,17 +1,16 @@
 [package]
-name = "derive-diff"
-version = "0.2.1"
-authors = ["Alexander Polyakov <aleksandr.polyakov@kupibilet.ru>"]
+name = "derive-newtype-deref"
+version = "0.1.0"
+authors = ["Arsen Galimov <loo.maclin@protonmail.com>"]
 description = "Procedural macro to derive Diff implementation"
 license = "MIT"
-documentation = "https://docs.rs/derive-diff"
-repository = "https://github.com/polachok/derive-diff"
-keywords = ["diff"]
+documentation = "https://docs.rs/derive-newtype-deref"
+repository = "https://github.com/loomaclin/derive-newtype-deref"
+keywords = ["newtype", "derive", "deref"]
 
 [dependencies]
 syn = "0.11"
 quote = "0.3"
-struct-diff = "0.2.1"
 
 [lib]
 proc-macro = true

@@ -1,0 +1,7 @@
+[package]
+name = "derive-newtype-deref"
+version = "0.1.0"
+authors = ["Arsen Galimov <loo.maclin@protonmail.com>"]
+
+[dependencies]
+derive-newtype-deref = { path = "../" }
