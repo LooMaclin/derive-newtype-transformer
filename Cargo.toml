@@ -1,12 +1,12 @@
 [package]
-name = "derive-newtype-deref"
+name = "derive-newtype-transformer"
 version = "0.1.0"
 authors = ["Arsen Galimov <loo.maclin@protonmail.com>"]
-description = "Procedural macro to derive Diff implementation"
+description = "Procedural macro to derive transformation from newtype to inner type"
 license = "MIT"
-documentation = "https://docs.rs/derive-newtype-deref"
-repository = "https://github.com/loomaclin/derive-newtype-deref"
-keywords = ["newtype", "derive", "deref"]
+documentation = "https://docs.rs/derive-newtype-transformer"
+repository = "https://github.com/loomaclin/derive-newtype-transformer"
+keywords = ["newtype", "derive", "transformer"]
 
 [dependencies]
 syn = "0.11"

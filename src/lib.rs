@@ -6,11 +6,12 @@ extern crate quote;
 
 use proc_macro::TokenStream;
 
-#[proc_macro_derive(NewtypeDeref)]
+#[proc_macro_derive(NewtypeTransformer)]
 pub fn generate_deref_impl(input: TokenStream) -> TokenStream {
     let s = input.to_string();
     let ast = syn::parse_derive_input(&s).unwrap();
     let gen = impl_deref(&ast);
+    println!("gen: {}", gen);
     gen.parse().unwrap()
 }
 
@@ -21,26 +22,33 @@ fn impl_deref(ast: &syn::DeriveInput) -> quote::Tokens {
             match variant_data {
                 &syn::VariantData::Tuple(ref fields) => {
                     if fields.len() == 1 {
-                        let field_type = &fields[0].ty;
+                        let field_type_origin = &fields[0].ty;
                         use quote::Ident;
-                        let name_binding = Ident::new(format!("{}Deref", name));
+                        use quote::ToTokens;
+                        use quote::Tokens;
+                        let mut field_type_tokens = Tokens::new();
+                        field_type_origin.to_tokens(&mut field_type_tokens);
+                        let field_type = field_type_tokens.into_string().to_lowercase();
+                        let new_method_name_owned = Ident::new(format!("to_{}", field_type));
+                        let new_method_name_ref = Ident::new(format!("as_{}", field_type));
                         quote!{
-                            use std::ops::{Deref as #name_binding};
-                            impl #name_binding for #name {
-                                type Target = #field_type;
+                            impl #name {
+                                pub fn #new_method_name_owned(self) -> #field_type_origin {
+                                    self.0
+                                }
 
-                                fn deref(&self) -> &Self::Target {
+                                pub fn #new_method_name_ref(&self) -> &#field_type_origin {
                                     &self.0
                                 }
                             }
                         }
                     } else {
-                        panic!("Derive Deref supported only for newtypes!");
+                        panic!("Derive NewtypeTransformer supported only for newtypes!");
                     }
                 },
-                _ => panic!("Derive Deref for this variant data type not supported!"),
+                _ => panic!("Derive NewtypeTransformer for this variant data type not supported!"),
             }
         },
-        _ => panic!("Derive Deref for this body type not supported!"),
+        _ => panic!("Derive NewtypeTransformer for this body type not supported!"),
     }
 }

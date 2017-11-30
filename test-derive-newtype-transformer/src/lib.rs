@@ -1,10 +1,10 @@
 #[macro_use]
-extern crate derive_newtype_deref;
+extern crate derive_newtype_transformer;
 
 #[cfg(test)]
 mod tests {
 
-    #[derive(NewtypeDeref)]
+    #[derive(NewtypeTransformer)]
     struct Test(String);
 
     impl Test {
@@ -13,7 +13,7 @@ mod tests {
         }
     }
 
-    #[derive(NewtypeDeref)]
+    #[derive(NewtypeTransformer)]
     struct Test1(Test);
 
     impl From<Test> for Test1 {
@@ -23,7 +23,7 @@ mod tests {
         }
     }
 
-    #[derive(NewtypeDeref)]
+    #[derive(NewtypeTransformer)]
     struct Test2(Test1);
 
     impl From<Test1> for Test2 {
@@ -33,23 +33,12 @@ mod tests {
         }
     }
 
-    #[derive(NewtypeDeref)]
-    struct NewtypeOverVec(pub Vec<String>);
-
-    #[test]
-    fn newtype_over_vec() {
-        let newtype_over_vec = NewtypeOverVec(vec!["a".to_string(), "b".to_string()]);
-        for i in newtype_over_vec.iter() {
-            println!("i: {}", i);
-        }
-    }
-
     #[test]
     fn one_newtype() {
         let test = Test::new("abc".to_owned());
         let test_1 = Test1::from(test);
         let test_2 = Test2::from(test_1);
 
-        assert_eq!("abc", ***test_2);
+        assert_eq!("abc", test_2.as_test1().as_test().as_string());
     }
 }
