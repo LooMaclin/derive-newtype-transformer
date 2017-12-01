@@ -39,6 +39,6 @@ mod tests {
         let test_1 = Test1::from(test);
         let test_2 = Test2::from(test_1);
 
-        assert_eq!("abc", test_2.as_test1().as_test().as_string());
+        assert_eq!("abc", test_2.as_test_1().as_test().as_string());
     }
 }

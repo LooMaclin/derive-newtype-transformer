@@ -3,8 +3,10 @@ extern crate proc_macro;
 extern crate syn;
 #[macro_use]
 extern crate quote;
+extern crate inflector;
 
 use proc_macro::TokenStream;
+use inflector::cases::snakecase::to_snake_case;
 
 #[proc_macro_derive(NewtypeTransformer)]
 pub fn generate_deref_impl(input: TokenStream) -> TokenStream {
@@ -27,7 +29,7 @@ fn impl_deref(ast: &syn::DeriveInput) -> quote::Tokens {
                         use quote::Tokens;
                         let mut field_type_tokens = Tokens::new();
                         field_type_origin.to_tokens(&mut field_type_tokens);
-                        let field_type = field_type_tokens.into_string().to_lowercase();
+                        let field_type = to_snake_case(field_type_tokens.as_str());
                         let new_method_name_owned = Ident::new(format!("to_{}", field_type));
                         let new_method_name_ref = Ident::new(format!("as_{}", field_type));
                         quote!{
