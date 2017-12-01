@@ -11,7 +11,6 @@ pub fn generate_deref_impl(input: TokenStream) -> TokenStream {
     let s = input.to_string();
     let ast = syn::parse_derive_input(&s).unwrap();
     let gen = impl_deref(&ast);
-    println!("gen: {}", gen);
     gen.parse().unwrap()
 }
 
